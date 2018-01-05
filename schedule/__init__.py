@@ -460,6 +460,11 @@ class Job(object):
                     self.next_run = self.next_run - datetime.timedelta(days=1)
                 elif self.unit == 'hours' and self.at_time.minute > now.minute:
                     self.next_run = self.next_run - datetime.timedelta(hours=1)
+            else:
+                now = datetime.datetime.now()
+                # If the job runs from minute :59 to :00
+                if (self.unit == 'hours' and self.at_time.minute > now.minute):
+                    self.next_run = self.next_run - datetime.timedelta(hours=1)
         if self.start_day is not None and self.at_time is not None:
             # Let's see if we will still make that time we specified today
             if (self.next_run - datetime.datetime.now()).days >= 7:
